@@ -154,7 +154,70 @@ def question_03():
 
 
 # Question 04
+def newton_armijo(fun, jacobi, x0, armijo, grad_f, c1):
+    i = 1
+    tol = 1e-3
+    x = x0
+
+    while True:
+        d = np.linalg.solve(jacobi(x), -fun(x))
+        t = armijo(fun, x, d, grad_f, c1)
+        x = x + t * d
+
+        if(np.abs(fun(x).all()) < tol):
+            return x, i
+
+        if(i > 1e4):
+            print("No convergence")
+            return x, 0
+
+        i += 1
+
+def armijo_rule(f, x, d, grad_f, c1):
+    i = 1
+    t = 1
+
+    while True:
+        lhs = f(x + t*d)
+        rhs = f(x) + t * c1 * d.T * grad_f(x)
+    
+        if (lhs <= rhs):
+            return t
+        else:
+            t = t/2
+        
+        if (i > 10):
+            print("No convergence")
+            return 1
+
+
+def f(x):
+    return np.array([(x[0]**2 + x[1]**2) + 0.2 * np.cos(x[0]**2 + x[1]**2)])
+
+
+def grad_f(x):
+    return np.array([[2*x[0] - 0.2*x[0]*np.sin(x[0]**2 + x[1])], [2 * x[1] - 0.2*np.sin(x[0]**2 + x[1])]])
+
+
+def jacobi_f(x):
+    e = 1e-7
+    x1 = grad_f(x + np.array([e , 0])) - grad_f(x)
+    x2 = grad_f(x + np.array([0 , e])) - grad_f(x)
+    return np.concatenate((x1.T, x2.T)) / e
+
+
+def question_04():
+    x0 = np.array([0.1, 0.1])
+    c1 = 1e-4
+    x, i = newton_armijo(f, jacobi_f, x0, armijo_rule, grad_f, c1)
+    print("\nQuestion 4\n-------------------------------------------")
+    print(f'{"Solution":20} {"==>":15} {x}')
+    print(f'{"Steps":20} {"==>":15} {i}')
+
+
+
 # Main
 question_01()
 question_02()
 question_03()
+# question_04()
