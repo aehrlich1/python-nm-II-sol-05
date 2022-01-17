@@ -47,13 +47,13 @@ def bisection(fun, a, b):
     ----------
     fun : function
         The function for which the root shall be found.
-    
+
     a : int
         The lower bound of the Domain.
 
     b : int
         The upper bound of the Domain.
-    
+
     Returns
     -------
     x : ndarray
@@ -103,12 +103,12 @@ def newton_method(fun, jacobi, x0):
     fun : ndarray
         Function who's root we want to find. Returns an n-dimensional
         array.
-        
-    
+
+
     jacobi : n x ndarray
         The correspoding jacobi matrix of the function n.
         Returns an array of dimension n x n.
-    
+
     Returns
     -------
     x : ndarray
@@ -120,7 +120,7 @@ def newton_method(fun, jacobi, x0):
 
     """
     i = 1
-    tol = 1e-3
+    tol = 1e-8
     x = x0
 
     while True:
@@ -173,6 +173,7 @@ def newton_armijo(fun, jacobi, x0, armijo, grad_f, c1):
 
         i += 1
 
+
 def armijo_rule(f, x, d, grad_f, c1):
     i = 1
     t = 1
@@ -180,12 +181,12 @@ def armijo_rule(f, x, d, grad_f, c1):
     while True:
         lhs = f(x + t*d)
         rhs = f(x) + t * c1 * d.T * grad_f(x)
-    
+
         if (lhs <= rhs):
             return t
         else:
             t = t/2
-        
+
         if (i > 10):
             print("No convergence")
             return 1
@@ -201,8 +202,8 @@ def grad_f(x):
 
 def jacobi_f(x):
     e = 1e-7
-    x1 = grad_f(x + np.array([e , 0])) - grad_f(x)
-    x2 = grad_f(x + np.array([0 , e])) - grad_f(x)
+    x1 = grad_f(x + np.array([e, 0])) - grad_f(x)
+    x2 = grad_f(x + np.array([0, e])) - grad_f(x)
     return np.concatenate((x1.T, x2.T)) / e
 
 
@@ -215,9 +216,8 @@ def question_04():
     print(f'{"Steps":20} {"==>":15} {i}')
 
 
-
 # Main
-question_01()
-question_02()
+# question_01()
+# question_02()
 question_03()
 # question_04()
